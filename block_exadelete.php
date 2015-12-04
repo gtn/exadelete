@@ -50,7 +50,10 @@ class block_exadelete extends block_list {
         $globalcontext = context_system::instance();
 
     	if(has_capability('block/exadelete:admin', $globalcontext)){	//Admin sieht immer Modulkonfiguration
-			$this->content->items[] = html_writer::link(new moodle_url('/blocks/exadelete/deleteuser.php'), get_string('deleteusers', 'block_exadelete'), array('title'=>get_string('deleteusers', 'block_exadelete')));
+			$this->content->items[] = html_writer::link(new moodle_url('/blocks/exadelete/anonymizeuser.php'), get_string('anonymizeusers', 'block_exadelete'), array('title'=>get_string('anonymizeusers', 'block_exadelete')));
+			$this->content->icons[] = html_writer::empty_tag('img', array('src'=>new moodle_url('/blocks/exadelete/pix/icon.png'), 'alt'=>'', 'height'=>16, 'width'=>23));
+			
+			$this->content->items[] = html_writer::link(new moodle_url('/blocks/exadelete/deleteexabis.php'), get_string('deleteexabis', 'block_exadelete'), array('title'=>get_string('deleteexabis', 'block_exadelete')));
 			$this->content->icons[] = html_writer::empty_tag('img', array('src'=>new moodle_url('/blocks/exadelete/pix/icon.png'), 'alt'=>'', 'height'=>16, 'width'=>23));
 			
     	}

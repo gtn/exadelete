@@ -23,12 +23,18 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['blocktitle'] = 'Exabis Anonymize';
-$string['pluginname'] = 'Exabis Anonymize';
-$string['exadelete:addinstance'] = 'Add Exabis Anonymize to the course';
-$string['exadelete:myaddinstance'] = 'Add Exabis Anonymize on My home';
-$string['deleteusers'] = 'Anonymize deleted users';
+$string['blocktitle'] = 'Exabis Cleanup';
+$string['pluginname'] = 'Exabis Cleanup';
+$string['exadelete:addinstance'] = 'Add Exabis Cleanup to the course';
+$string['exadelete:myaddinstance'] = 'Add Exabis Cleanup on My home';
+$string['anonymizeusers'] = 'Clean up user data';
 $string['nousersfound'] = 'No users found, that are deleted in your Moodle.';
-$string['description'] = 'This block is used to anonymize data from deleted users. To use this plugin you have to delete users in your Moodle first';
+$string['description'] = 'This block is used to eliminate data from deleted users. To use this function you have to delete users in your Moodle first';
 $string['alluserdata'] = 'All given data from user ';
-$string['deleted'] = 'anonymized.';
+$string['deleted'] = ' deleted.';
+$string['description_exa'] = 'Delete user data from an Exabis module. This can not be undone!';
+$string['exacomp_data'] = 'Delete user data from Exabis Competencies';
+$string['exaport_data'] = 'Delete user data from Exabis e-Portfolio';
+$string['exastud_data'] = 'Delete user data from Exabis Studentreview';
+$string['deleteexabis'] = 'Delete data form Exabis modules';
+
