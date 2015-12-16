@@ -89,11 +89,6 @@ switch($action){
 			$result = $DB->delete_records('block_exaportviewshar', array('userid'=>$user));
 			
 			$result = $DB->delete_records('block_exaportresume', array('user_id'=>$user));
-			$result = $DB->delete_records('block_exaportresume_certif', array('user_id'=>$user));
-			$result = $DB->delete_records('block_exaportresume_edu', array('user_id'=>$user));
-			$result = $DB->delete_records('block_exaportresume_employ', array('user_id'=>$user));
-			$result = $DB->delete_records('block_exaportresume_mbrship', array('user_id'=>$user));
-			$result = $DB->delete_records('block_exaportresume_public', array('user_id'=>$user));
 			$result = $DB->delete_records('block_exaportuser', array('user_id'=>$user));
 		}
 		break;
