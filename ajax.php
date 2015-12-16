@@ -105,7 +105,7 @@ switch($action){
 			$result = $DB->delete_records('block_exastudclass', array('userid'=>$user));
 			$result = $DB->delete_records('block_exastudperiod', array('userid'=>$user));
 			
-			$result = $DB->delete_records('block_exstudclassteachers', array('teacherid'=>$user));
+			$result = $DB->delete_records('block_exastudclassteachers', array('teacherid'=>$user));
 			$result = $DB->delete_records('block_exastudreview', array('teacherid'=>$user));
 			
 			$result = $DB->delete_records('block_exastudclassstudents', array('studentid'=>$user));

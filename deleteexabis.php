@@ -53,12 +53,13 @@ echo html_writer::tag('p', get_string('description_exa', 'block_exadelete'));
 
 //alle noch nicht gelöschten Benutzer
 $users = $DB->get_records('user', array('deleted'=>0));
-
+echo html_writer::start_tag('ul');
 foreach($users as $user){
-	echo html_writer::empty_tag('br').
-		html_writer::checkbox('cb-'.$user->id, 'cb-'.$user->id, false, $user->firstname." ".$user->lastname, array('userid'=>$user->id));
+	echo html_writer::start_tag('li').
+		html_writer::checkbox('cb-'.$user->id, 'cb-'.$user->id, false, $user->firstname." ".$user->lastname, array('userid'=>$user->id))
+		.html_writer::end_tag('li');
 }
-
+echo html_writer::end_tag('ul');
 $buttons = "";
 
 if(check_block_available('exacomp'))

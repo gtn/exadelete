@@ -17,6 +17,8 @@ window.jQueryExadelete = jQuery.noConflict(true);
 				action : 'exacomp'
 			}).done(function (ret) {
 				alert('Ausgewählte Benutzerdaten aus Exabis Competencies entfernt!');
+				$('input[name=exacomp]').removeAttr('disabled');
+				$('input[name=exacomp]').blur();
 			});
 		}
 		
@@ -38,6 +40,8 @@ window.jQueryExadelete = jQuery.noConflict(true);
 				action : 'exaport'
 			}).done(function (ret) {
 				alert('Ausgewählte Benutzerdaten aus Exabis e-Portfolio entfernt!');
+				$('input[name=exaport]').removeAttr('disabled');
+				$('input[name=exaport]').blur();
 			});
 		}
 		
@@ -59,6 +63,8 @@ window.jQueryExadelete = jQuery.noConflict(true);
 				action : 'exastud'
 			}).done(function (ret) {
 				alert('Ausgewählte Benutzerdaten aus Exabis Studentreview entfernt!');
+				$('input[name=exastud]').removeAttr('disabled');
+				$('input[name=exastud]').blur();
 			});
 		}
 		
