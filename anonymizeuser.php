@@ -170,13 +170,13 @@ if(!$users){
 		$result = $DB->delete_records("files", array("userid"=>$userid));
 		
 		if(check_block_available('exacomp')){
-			block_exacomp_delete_user_data($userid);
+			block_exacomp\api::delete_user_data($userid);
 		}
 		if(check_block_available('exaport')){
 			block_exaport_delete_user_data($userid);
 		}
 		if(check_block_available('exastud')){
-			block_exastud_delete_user_data($userid);
+			block_exastud\api::delete_user_data($userid);
 		}
 
 		

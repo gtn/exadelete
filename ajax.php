@@ -51,7 +51,7 @@ switch($action){
 		$user_ids = json_decode($users);
 		
 		foreach($user_ids as $user){
-			block_exacomp_delete_user_data($user);
+			block_exacomp\api::delete_user_data($user);
 		}
 		
 		break;
@@ -70,7 +70,7 @@ switch($action){
 		$user_ids = json_decode($users);
 		
 		foreach($user_ids as $user){
-			block_exastud_delete_user_data($user);
+			block_exastud\api::delete_user_data($user);
 		}
 		
 		break;
