@@ -29,6 +29,8 @@ global $DB, $OUTPUT, $PAGE;
 
 $context = context_system::instance();
 require_login();
+if(!has_capability('block/exadelete:admin', $context))
+	die('not allowed to access this site');
 
 /* PAGE IDENTIFIER - MUST BE CHANGED. Please use string identifier from lang file */
 $page_identifier = 'anonymizeusers';
@@ -70,29 +72,19 @@ $array = array("assignfeedback_editpdf_quick", "assignment_submissions", "assign
 	"workshop_comments_old", "workshop_submissions_old");
 
 if(check_block_available('exacomp')){
-	$array[] = "block_exacompcompuser";
-	$array[] = "block_exacompcompuser_mm";
-	$array[] = "block_exacompprofilesettings";
+	require_once dirname(__FILE__)."/../exacomp/lib/lib.php";
 }
 if(check_block_available('exaport')){
-	$array[] = "block_exaportcate";
-	$array[] = "block_exaportitem";
-	$array[] = "block_exaportitemcomm";
-	$array[] = "block_exaportitemshar";
-	$array[] = "block_exaportview";
-	$array[] = "block_exaportviewshar";
-	$array[] = "block_exaportcatshar";
-	$array[] = "block_exaportcat_structshar";
-
+	require_once dirname(__FILE__)."/../exaport/lib/lib.php";
 }
 if(check_block_available('exastud')){
-	$array[] = "block_exastudclass";
-	$array[] = "block_exastudperiod";
+	require_once dirname(__FILE__)."/../exastud/lib/lib.php";
 }
 
 $select = "deleted = 1 AND firstname <> 'Deleted'";
 $users = $DB->get_records_select("user", $select);
 
+echo html_writer::start_tag('div', array('class'=>'exadelete'));
 echo html_writer::tag('p', get_string('description', 'block_exadelete'));
 
 
@@ -178,38 +170,13 @@ if(!$users){
 		$result = $DB->delete_records("files", array("userid"=>$userid));
 		
 		if(check_block_available('exacomp')){
-			$result = $DB->delete_records("block_exacompcrossstud_mm", array("studentid"=>$userid));
-			$result = $DB->delete_records("block_exacompdescrvisibility", array("studentid"=>$userid));
-			$result = $DB->delete_records("block_exacompexameval", array("studentid"=>$userid));
-			$result = $DB->delete_records("block_exacompexampvisibility", array("studentid"=>$userid));
-			$result = $DB->delete_records("block_exacompexternaltrainer", array("studentid"=>$userid));
-			$result = $DB->delete_records("block_exacompschedule", array("studentid"=>$userid));
-			
-			$result = $DB->delete_records("block_exacompcrosssubjects", array("creatorid"=>$userid));
-			$result = $DB->delete_records("block_exacompexamples", array("creatorid"=>$userid));
-			$result = $DB->delete_records("block_exacompschedule", array("creatorid"=>$userid));
-			
-			$result = $DB->delete_records("block_exacompexameval", array("teacher_reviewerid"=>$userid));
-			
-			$result = $DB->delete_records("block_exacompexternaltrainer", array("trainerid"=>$userid));
-			
-			$result = $DB->delete_records("block_exacompcompuser", array("reviewerid"=>$userid));
-			$result = $DB->delete_records("block_exacompcompuser_mm", array("reviewerid"=>$userid));
+			block_exacomp_delete_user_data($userid);
 		}
 		if(check_block_available('exaport')){
-			$result = $DB->delete_records("block_exaportuser", array("user_id"=>$userid));
-			$result = $DB->delete_records("block_exaportresume", array("user_id"=>$userid));
-			$result = $DB->delete_records("block_exaportresume_certif", array("user_id"=>$userid));
-			$result = $DB->delete_records("block_exaportresume_edu", array("user_id"=>$userid));
-			$result = $DB->delete_records("block_exaportresume_employ", array("user_id"=>$userid));
-			$result = $DB->delete_records("block_exaportresume_mbrship", array("user_id"=>$userid));
-			$result = $DB->delete_records("block_exaportresume_public", array("user_id"=>$userid));
+			block_exaport_delete_user_data($userid);
 		}
 		if(check_block_available('exastud')){
-			$result = $DB->delete_records("block_exastudclassstudents", array("studentid"=>$userid));
-			$result = $DB->delete_records("block_exastudclassteachers", array("teacherid"=>$userid));
-			$result = $DB->delete_records("block_exastudreview", array("teacherid"=>$userid));
-			$result = $DB->delete_records("block_exastudreview", array("studentid"=>$userid));
+			block_exastud_delete_user_data($userid);
 		}
 
 		
@@ -237,6 +204,7 @@ function check_block_available($name) {
 	return false;
 }
 
+echo html_writer::end_tag('div');
 /* END CONTENT REGION */
 
 echo $OUTPUT->footer();

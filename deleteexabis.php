@@ -28,7 +28,9 @@ global $DB, $OUTPUT, $PAGE;
 
 $context = context_system::instance();
 require_login();
-
+if(!has_capability('block/exadelete:admin', $context))
+	die('not allowed to access this site');
+	
 /* PAGE IDENTIFIER - MUST BE CHANGED. Please use string identifier from lang file */
 $page_identifier = 'deleteexabis';
 
@@ -49,13 +51,14 @@ $navnode->make_active();// build tab navigation & print header
 echo $OUTPUT->header();
 
 //CONTENT-REGION
+echo html_writer::start_tag('div', array('class'=>'exadelete'));
 echo html_writer::tag('p', get_string('description_exa', 'block_exadelete'));
 
 //alle noch nicht gelöschten Benutzer
 $users = $DB->get_records('user', array('deleted'=>0));
-echo html_writer::start_tag('ul');
+echo html_writer::start_tag('ul', array('class'=>'exadeleteul'));
 foreach($users as $user){
-	echo html_writer::start_tag('li').
+	echo html_writer::start_tag('li', array('class'=>'exadeleteli')).
 		html_writer::checkbox('cb-'.$user->id, 'cb-'.$user->id, false, $user->firstname." ".$user->lastname, array('userid'=>$user->id))
 		.html_writer::end_tag('li');
 }
@@ -73,6 +76,7 @@ if(check_block_available('exastud'))
 
 echo html_writer::div($buttons, 'buttons');
 
+echo html_writer::end_tag('div');
 echo $OUTPUT->footer();
 
 function check_block_available($name) {

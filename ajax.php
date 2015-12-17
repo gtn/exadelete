@@ -46,65 +46,31 @@ $action = required_param('action', PARAM_TEXT);
 
 switch($action){
 	case ('exacomp'):
+		require_once dirname(__FILE__)."/../exacomp/lib/lib.php";
 		$users = required_param('users', PARAM_TEXT);
 		$user_ids = json_decode($users);
 		
 		foreach($user_ids as $user){
-			$result = $DB->delete_records('block_exacompcompuser', array("userid"=>$user));
-			$result = $DB->delete_records('block_exacompcompuser_mm', array("userid"=>$user));
-			$result = $DB->delete_records('block_exacompprofilesettings', array("userid"=>$user));
-			
-			$result = $DB->delete_records('block_exacompcrossstud_mm', array("studentid"=>$user));
-			$result = $DB->delete_records('block_exacompdescrvisibility', array("studentid"=>$user));
-			$result = $DB->delete_records('block_exacompexameval', array("studentid"=>$user));
-			$result = $DB->delete_records('block_exacompexampvisibility', array("studentid"=>$user));
-			$result = $DB->delete_records('block_exacompexternaltrainer', array("studentid"=>$user));
-			$result = $DB->delete_records('block_exacompschedule', array("studentid"=>$user));
-			
-			$result = $DB->delete_records('block_exacompcrosssubjects', array("creatorid"=>$user));
-			$result = $DB->delete_records('block_exacompexamples', array("creatorid"=>$user));
-			$result = $DB->delete_records('block_exacompschedule', array("creatorid"=>$user));
-			
-			$result = $DB->delete_records('block_exacompexameval', array("teacher_reviewerid"=>$user));
-			
-			$result = $DB->delete_records('block_exacompexternaltrainer', array("trainerid"=>$user));
-			
-			$result = $DB->delete_records('block_exacompcompuser', array("reviewerid"=>$user));
-			$result = $DB->delete_records('block_exacompcompuser_mm', array("reviewerid"=>$user));	
+			block_exacomp_delete_user_data($user);
 		}
 		
 		break;
 	case ('exaport'):
+		require_once dirname(__FILE__)."/../exaport/lib/lib.php";
 		$users = required_param('users', PARAM_TEXT);
 		$user_ids = json_decode($users);
 		
 		foreach($user_ids as $user){
-			$result = $DB->delete_records('block_exaportcate', array('userid'=>$user));
-			$result = $DB->delete_records('block_exaportcatshar', array('userid'=>$user));
-			$result = $DB->delete_records('block_exaportcat_structshar', array('userid'=>$user));
-			$result = $DB->delete_records('block_exaportitem', array('userid'=>$user));
-			$result = $DB->delete_records('block_exaportitemcomm', array('userid'=>$user));
-			$result = $DB->delete_records('block_exaportitemshar', array('userid'=>$user));
-			$result = $DB->delete_records('block_exaportview', array('userid'=>$user));
-			$result = $DB->delete_records('block_exaportviewshar', array('userid'=>$user));
-			
-			$result = $DB->delete_records('block_exaportresume', array('user_id'=>$user));
-			$result = $DB->delete_records('block_exaportuser', array('user_id'=>$user));
+			block_exaport_delete_user_data($user);
 		}
 		break;
 	case('exastud'):
+		require_once dirname(__FILE__)."/../exastud/lib/lib.php";
 		$users = required_param('users', PARAM_TEXT);
 		$user_ids = json_decode($users);
 		
 		foreach($user_ids as $user){
-			$result = $DB->delete_records('block_exastudclass', array('userid'=>$user));
-			$result = $DB->delete_records('block_exastudperiod', array('userid'=>$user));
-			
-			$result = $DB->delete_records('block_exastudclassteachers', array('teacherid'=>$user));
-			$result = $DB->delete_records('block_exastudreview', array('teacherid'=>$user));
-			
-			$result = $DB->delete_records('block_exastudclassstudents', array('studentid'=>$user));
-			$result = $DB->delete_records('block_exastudreview', array('studentid'=>$user));
+			block_exastud_delete_user_data($user);
 		}
 		
 		break;
