@@ -29,8 +29,6 @@ class block_exadelete extends block_list {
     }
 
     function get_content() {
-        global $CFG, $OUTPUT;
-
         if ($this->content !== null) {
             return $this->content;
         }
@@ -46,7 +44,6 @@ class block_exadelete extends block_list {
         $this->content->footer = '';
 
         // user/index.php expect course context, so get one if page has module context.
-        $currentcontext = $this->page->context->get_course_context(false);
         $globalcontext = context_system::instance();
 
     	if(has_capability('block/exadelete:admin', $globalcontext)){	//Admin sieht immer Modulkonfiguration
@@ -76,7 +73,9 @@ class block_exadelete extends block_list {
           return false;
     }
 
-    function has_config() {return true;}
+    function has_config() {
+        return true;
+    }
 
     public function cron() {
         return true;

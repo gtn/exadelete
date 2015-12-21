@@ -1,31 +1,6 @@
 <?php
 
-// This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
-/**
- * delete user details
- *
- * @package   block_exadelete
- * @copyright GTN solutions, Michaela Murauer <mmurauer@gtn-solutions.com>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
-require_once dirname(__FILE__)."/../../config.php";
-
-global $DB, $OUTPUT, $PAGE;
+require_once __DIR__.'/inc.php';
 
 $context = context_system::instance();
 require_login();
@@ -70,16 +45,6 @@ $array = array("assignfeedback_editpdf_quick", "assignment_submissions", "assign
 	"user_password_resets", "user_preferences", "user_private_key", "wiki_locks", 
 	"wiki_subwikis", "wiki_versions", "workshop_aggregations", "workshop_assessments_old", 
 	"workshop_comments_old", "workshop_submissions_old");
-
-if(check_block_available('exacomp')){
-	require_once dirname(__FILE__)."/../exacomp/lib/lib.php";
-}
-if(check_block_available('exaport')){
-	require_once dirname(__FILE__)."/../exaport/lib/lib.php";
-}
-if(check_block_available('exastud')){
-	require_once dirname(__FILE__)."/../exastud/lib/lib.php";
-}
 
 $select = "deleted = 1 AND firstname <> 'Deleted'";
 $users = $DB->get_records_select("user", $select);
@@ -169,13 +134,13 @@ if(!$users){
 
 		$result = $DB->delete_records("files", array("userid"=>$userid));
 		
-		if(check_block_available('exacomp')){
+		if(block_exadelete\check_block_available('exacomp')){
 			block_exacomp\api::delete_user_data($userid);
 		}
-		if(check_block_available('exaport')){
-			block_exaport_delete_user_data($userid);
+		if(block_exadelete\check_block_available('exaport')){
+			block_exaport\api::delete_user_data($userid);
 		}
-		if(check_block_available('exastud')){
+		if(block_exadelete\check_block_available('exastud')){
 			block_exastud\api::delete_user_data($userid);
 		}
 
@@ -194,19 +159,8 @@ if(!$users){
 		echo get_string('alluserdata', 'block_exadelete').$user->firstname." ".$user->lastname.get_string('deleted', 'block_exadelete')."<br/>";
 	}
 }
-function check_block_available($name) {
-	global $DB;
-	
-	$result = $DB->get_records('block', array("name"=>$name));
-	if($result)
-		return true;
-		
-	return false;
-}
 
 echo html_writer::end_tag('div');
 /* END CONTENT REGION */
 
 echo $OUTPUT->footer();
-
-?>
