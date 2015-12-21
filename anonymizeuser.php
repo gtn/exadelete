@@ -112,19 +112,9 @@ if(!$users){
 		$fs = get_file_storage();
 		$result = $DB->get_records("files", array("userid"=>$userid));
 
-		foreach($result as $entry){
-			// Prepare file record object
-			$fileinfo = array(
-				'component' => $entry->component,
-				'filearea' => $entry->filearea,     // usually = table name
-				'itemid' => $entry->itemid,               // usually = ID of row in table
-				'contextid' => $entry->contextid, // ID of context
-				'filepath' => $entry->filepath,           // any path beginning and ending in /
-				'filename' => $entry->filename); // any filename
-
+		foreach($result as $filefrecord){
 			// Get file
-			$file = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
-			$fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
+			$file = $fs->get_file_instance($filefrecord);
 
 			// get it if it exists
 			if ($file) {
