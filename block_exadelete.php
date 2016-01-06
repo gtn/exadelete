@@ -60,13 +60,13 @@ class block_exadelete extends block_list {
 
     public function applicable_formats() {
         return array('all' => false,
-                     'site' => true,
-					 'my' => true,
+                     'site' => false,
+					 'my' => false,
                      'site-index' => true,
+                     'admin' => true,
                      'course-view' => false, 
-                     'course-view-social' => false,
-                     'mod' => false, 
-                     'mod-quiz' => false);
+                     'mod' => false
+                    );
     }
 
     public function instance_allow_multiple() {
