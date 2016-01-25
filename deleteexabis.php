@@ -40,7 +40,7 @@ if ($action) {
 	switch($action){
 		case 'delete_exacomp':
 			if (!block_exadelete\check_block_available('exacomp')) {
-				throw new Eexception('action not available');
+				throw new moodle_exception('action not available');
 			}
 
 			$userids = clean_param_array(explode(',', required_param('userids', PARAM_SEQUENCE)), PARAM_INT);
@@ -52,7 +52,7 @@ if ($action) {
 			break;
 		case 'delete_exaport':
 			if (!block_exadelete\check_block_available('exaport')) {
-				throw new Eexception('action not available');
+				throw new moodle_exception('action not available');
 			}
 
 			$userids = clean_param_array(explode(',', required_param('userids', PARAM_SEQUENCE)), PARAM_INT);
@@ -64,7 +64,7 @@ if ($action) {
 			break;
 		case('delete_exastud'):
 			if (!block_exadelete\check_block_available('exastud')) {
-				throw new Eexception('action not available');
+				throw new moodle_exception('action not available');
 			}
 
 			$userids = clean_param_array(explode(',', required_param('userids', PARAM_SEQUENCE)), PARAM_INT);
