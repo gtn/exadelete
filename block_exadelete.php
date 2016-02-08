@@ -74,7 +74,7 @@ class block_exadelete extends block_list {
     }
 
     function has_config() {
-        return true;
+        return false;
     }
 
     public function cron() {
