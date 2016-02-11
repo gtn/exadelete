@@ -27,6 +27,7 @@ $string['blocktitle'] = 'Exabis Cleanup';
 $string['pluginname'] = 'Exabis Cleanup';
 $string['exadelete:addinstance'] = 'Exabis Cleanup zum Kurs hinzuf&uuml;gen';
 $string['exadelete:myaddinstance'] = 'Exabis Cleanup zur eigenen Startseite hinzuf&uuml;gen';
+$string['exadelete:admin'] = 'Zugriff auf Exabis Cleanup erlauben';
 $string['anonymizeusers'] = 'Benutzerdaten bereinigen';
 $string['nousersfound'] = 'Keine im Moodle gel&ouml;schten Personen zum Bereinigen gefunden.';
 $string['description'] = 'Diese Funktion wird verwendet um einen in Moodle gelöschten User vollständig aus dem System zu entfernen. Um diese Funktion verwenden zu k&ouml;nnen, muss ein Benutzer voher im Moodle gel&ouml;scht werden. Exabis Cleanup greift nur auf Benutzerdaten zu, es werden hier keine Informationen hinterlegt.';

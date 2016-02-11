@@ -27,6 +27,7 @@ $string['blocktitle'] = 'Exabis Cleanup';
 $string['pluginname'] = 'Exabis Cleanup';
 $string['exadelete:addinstance'] = 'Add Exabis Cleanup to the course';
 $string['exadelete:myaddinstance'] = 'Add Exabis Cleanup on My home';
+$string['exadelete:admin'] = 'Allow access to Exabis Cleanup block';
 $string['anonymizeusers'] = 'Clean up user data';
 $string['nousersfound'] = 'No users found, that are deleted in your Moodle.';
 $string['description'] = 'This block is used to eliminate data from deleted users. To use this function you have to delete users in your Moodle first';
