@@ -21,9 +21,9 @@ require_once __DIR__.'/inc.php';
 
 $context = context_system::instance();
 require_login();
-if(!has_capability('block/exadelete:admin', $context))
+if (!has_capability('block/exadelete:admin', $context))
 	die('not allowed to access this site');
-	
+
 /* PAGE IDENTIFIER - MUST BE CHANGED. Please use string identifier from lang file */
 $page_identifier = 'deleteexabis';
 
@@ -54,7 +54,7 @@ if (optional_param('delete_exaport', null, PARAM_RAW)) {
 if ($action) {
 	require_sesskey();
 
-	switch($action){
+	switch ($action) {
 		case 'delete_exacomp':
 			if (!block_exadelete\check_block_available('exacomp')) {
 				throw new moodle_exception('action not available');
@@ -99,30 +99,30 @@ if ($action) {
 }
 
 //CONTENT-REGION
-echo html_writer::start_tag('div', array('class'=>'exadelete'));
+echo html_writer::start_tag('div', array('class' => 'exadelete'));
 echo html_writer::tag('p', get_string('description_exa', 'block_exadelete'));
 
 //alle noch nicht gelöschten Benutzer
-$users = $DB->get_records('user', array('deleted'=>0));
-echo html_writer::start_tag('ul', array('class'=>'exadeleteul'));
-foreach($users as $user){
+$users = $DB->get_records('user', array('deleted' => 0));
+echo html_writer::start_tag('ul', array('class' => 'exadeleteul'));
+foreach ($users as $user) {
 	if (isguestuser($user)) continue;
 
-	echo html_writer::start_tag('li', array('class'=>'exadeleteli')).
-		html_writer::checkbox('users', $user->id, false, $user->firstname." ".$user->lastname)
-		.html_writer::end_tag('li');
+	echo html_writer::start_tag('li', array('class' => 'exadeleteli')).
+		html_writer::checkbox('users', $user->id, false, $user->firstname." ".$user->lastname).
+		html_writer::end_tag('li');
 }
 echo html_writer::end_tag('ul');
 $buttons = "";
 
-if(block_exadelete\check_block_available('exacomp'))
-	$buttons .= html_writer::empty_tag('input', array('type'=>'submit', 'value'=>get_string('exacomp_data', 'block_exadelete'), 'name'=>'delete_exacomp'));
+if (block_exadelete\check_block_available('exacomp'))
+	$buttons .= html_writer::empty_tag('input', array('type' => 'submit', 'value' => get_string('exacomp_data', 'block_exadelete'), 'name' => 'delete_exacomp'));
 
-if(block_exadelete\check_block_available('exaport'))
-	$buttons .= html_writer::empty_tag('input', array('type'=>'submit', 'value'=>get_string('exaport_data', 'block_exadelete'), 'name'=>'delete_exaport'));
+if (block_exadelete\check_block_available('exaport'))
+	$buttons .= html_writer::empty_tag('input', array('type' => 'submit', 'value' => get_string('exaport_data', 'block_exadelete'), 'name' => 'delete_exaport'));
 
-if(block_exadelete\check_block_available('exastud'))
-	$buttons .= html_writer::empty_tag('input', array('type'=>'submit', 'value'=>get_string('exastud_data', 'block_exadelete'), 'name'=>'delete_exastud'));
+if (block_exadelete\check_block_available('exastud'))
+	$buttons .= html_writer::empty_tag('input', array('type' => 'submit', 'value' => get_string('exastud_data', 'block_exadelete'), 'name' => 'delete_exastud'));
 
 echo '<form id="block_exadelete_delete_users" method="post" action="'.$_SERVER['REQUEST_URI'].'">';
 echo '<input type="hidden" name="sesskey" value="'.sesskey().'" />';

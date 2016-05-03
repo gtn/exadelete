@@ -19,12 +19,17 @@
 
 namespace block_exadelete;
 
+defined('MOODLE_INTERNAL') || die();
+
+require_once __DIR__.'/common.php';
+
 function check_block_available($name) {
 	global $DB;
 
-	$result = $DB->get_records('block', array("name"=>$name));
-	if($result)
-		return true;
+	$result = $DB->get_records('block', array("name" => $name));
+	if (!$result) {
+		return false;
+	}
 
-	return false;
+	return class_exists('\block_'.$name.'\api');
 }

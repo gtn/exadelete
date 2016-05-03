@@ -26,6 +26,8 @@ class block_exadelete extends block_list {
     }
 
     function get_content() {
+        global $OUTPUT;
+        
         if ($this->content !== null) {
             return $this->content;
         }
@@ -40,16 +42,14 @@ class block_exadelete extends block_list {
         $this->content->icons = array();
         $this->content->footer = '';
 
-        // user/index.php expect course context, so get one if page has module context.
         $globalcontext = context_system::instance();
 
     	if(has_capability('block/exadelete:admin', $globalcontext)){	//Admin sieht immer Modulkonfiguration
-			$this->content->items[] = html_writer::link(new moodle_url('/blocks/exadelete/anonymizeuser.php'), get_string('anonymizeusers', 'block_exadelete'), array('title'=>get_string('anonymizeusers', 'block_exadelete')));
-			$this->content->icons[] = html_writer::empty_tag('img', array('src'=>new moodle_url('/blocks/exadelete/pix/userban.png'), 'alt'=>'', 'height'=>16, 'width'=>23));
-			
-			$this->content->items[] = html_writer::link(new moodle_url('/blocks/exadelete/deleteexabis.php'), get_string('deleteexabis', 'block_exadelete'), array('title'=>get_string('deleteexabis', 'block_exadelete')));
-			$this->content->icons[] = html_writer::empty_tag('img', array('src'=>new moodle_url('/blocks/exadelete/pix/serverban.png'), 'alt'=>'', 'height'=>16, 'width'=>23));
-			
+    		$icon = '<img src="'.$OUTPUT->pix_url('userban', 'block_exadelete').'" class="icon" alt="" />';
+			$this->content->items[] = html_writer::link(new moodle_url('/blocks/exadelete/anonymizeuser.php'), $icon.get_string('anonymizeusers', 'block_exadelete'), array('title'=>get_string('anonymizeusers', 'block_exadelete')));
+
+    		$icon = '<img src="'.$OUTPUT->pix_url('serverban', 'block_exadelete').'" class="icon" alt="" />';
+			$this->content->items[] = html_writer::link(new moodle_url('/blocks/exadelete/deleteexabis.php'), $icon.get_string('deleteexabis', 'block_exadelete'), array('title'=>get_string('deleteexabis', 'block_exadelete')));
     	}
 		
         return $this->content;
