@@ -95,7 +95,7 @@ if ($action) {
 			print_error('wrong action: '.$action);
 	}
 
-	notice('Ausgewählte Benutzerdaten aus Exabis Competencies entfernt!');
+	notice(\block_exadelete\trans(['de:Ausgewählte Benutzerdaten wurden entfernt!']), new moodle_url('/blocks/exadelete/deleteexabis.php'));
 }
 
 //CONTENT-REGION
