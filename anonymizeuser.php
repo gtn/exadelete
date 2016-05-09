@@ -30,7 +30,7 @@ $page_identifier = 'anonymizeusers';
 /* PAGE URL - MUST BE CHANGED */
 $PAGE->set_context($context);
 $PAGE->set_url('/blocks/exadelete/anonymizeuser.php');
-$PAGE->set_heading(get_string('pluginname', 'block_exadelete'));
+$PAGE->set_heading(get_string('blocktitle', 'block_exadelete'));
 $PAGE->set_title(get_string($page_identifier, 'block_exadelete'));
 
 

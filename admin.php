@@ -41,6 +41,7 @@ $navnode->make_active();// build tab navigation & print header
 
 echo $OUTPUT->header();
 
+/*
 if (optional_param('delete_exaport', null, PARAM_RAW)) {
 	$action = 'delete_exaport';
 } elseif (optional_param('delete_exastud', null, PARAM_RAW)) {
@@ -97,39 +98,45 @@ if ($action) {
 
 	notice(\block_exadelete\trans(['de:Ausgewählte Benutzerdaten wurden entfernt!']), new moodle_url('/blocks/exadelete/deleteexabis.php'));
 }
+*/
 
 //CONTENT-REGION
-echo html_writer::start_tag('div', array('class' => 'exadelete'));
-echo html_writer::tag('p', get_string('description_exa', 'block_exadelete'));
 
-//alle noch nicht gelöschten Benutzer
-$users = $DB->get_records('user', array('deleted' => 0));
-echo html_writer::start_tag('ul', array('class' => 'exadeleteul'));
-foreach ($users as $user) {
-	if (isguestuser($user)) continue;
+echo html_writer::tag("h2", \block_exadelete\trans('de:Schüler Daten löschen'));
 
-	echo html_writer::start_tag('li', array('class' => 'exadeleteli')).
-		html_writer::checkbox('users', $user->id, false, $user->firstname." ".$user->lastname).
-		html_writer::end_tag('li');
+$table = new html_table();
+
+$table->head = [
+	'',
+	'Typ',
+	\block_exadelete\get_string('firstname'),
+	\block_exadelete\get_string('lastname'),
+	\block_exadelete\get_string('email'),
+];
+$table->align = array("left", "left", "left", "left");
+$table->attributes['style'] = "width: 100%;";
+$table->size = ['5%', '20%', '20%', '20%', '20%'];
+
+for ($i = 0; $i < 15; $i++) {
+	$table->data[] = [
+		'<input type="checkbox" />',
+		$i < 5 ? 'Ausgeschieden' : 'Bildungsstandard 5-6 erreicht',
+		'Vorname',
+		'Nachanme',
+		'email',
+	];
 }
-echo html_writer::end_tag('ul');
-$buttons = "";
+//
 
-if (block_exadelete\check_block_available('exacomp'))
-	$buttons .= html_writer::empty_tag('input', array('type' => 'submit', 'value' => get_string('exacomp_data', 'block_exadelete'), 'name' => 'delete_exacomp'));
+echo html_writer::table($table);
 
-if (block_exadelete\check_block_available('exaport'))
-	$buttons .= html_writer::empty_tag('input', array('type' => 'submit', 'value' => get_string('exaport_data', 'block_exadelete'), 'name' => 'delete_exaport'));
-
-if (block_exadelete\check_block_available('exastud'))
-	$buttons .= html_writer::empty_tag('input', array('type' => 'submit', 'value' => get_string('exastud_data', 'block_exadelete'), 'name' => 'delete_exastud'));
-
-echo '<form id="block_exadelete_delete_users" method="post" action="'.$_SERVER['REQUEST_URI'].'">';
-echo '<input type="hidden" name="sesskey" value="'.sesskey().'" />';
-echo '<input type="hidden" name="userids" />';
-echo html_writer::div($buttons, 'buttons');
-
-echo '</form>';
-
-echo html_writer::end_tag('div');
+echo html_writer::tag("h2", \block_exadelete\trans('de:Löschverhalten'));
+?>
+	<input type="checkbox" value="leb" /> Lernentwicklungsbericht<br/>
+	<input type="checkbox" value="kompetenzraster" /> Kompetenzraster<br/>
+	<input type="button"
+		   value="Daten löschen"
+		   onclick="if (confirm('Wirklich löschen?')) alert('TODO: Löschroutine hier einbinden');"
+	/>
+<?php
 echo $OUTPUT->footer();

@@ -21,8 +21,6 @@ require_once __DIR__.'/inc.php';
 
 $context = context_system::instance();
 require_login();
-if (!has_capability('block/exadelete:admin', $context))
-	die('not allowed to access this site');
 
 /* PAGE IDENTIFIER - MUST BE CHANGED. Please use string identifier from lang file */
 $page_identifier = 'deleteexabis';
@@ -41,6 +39,7 @@ $navnode->make_active();// build tab navigation & print header
 
 echo $OUTPUT->header();
 
+/*
 if (optional_param('delete_exaport', null, PARAM_RAW)) {
 	$action = 'delete_exaport';
 } elseif (optional_param('delete_exastud', null, PARAM_RAW)) {
@@ -97,39 +96,16 @@ if ($action) {
 
 	notice(\block_exadelete\trans(['de:Ausgewählte Benutzerdaten wurden entfernt!']), new moodle_url('/blocks/exadelete/deleteexabis.php'));
 }
+*/
 
 //CONTENT-REGION
-echo html_writer::start_tag('div', array('class' => 'exadelete'));
-echo html_writer::tag('p', get_string('description_exa', 'block_exadelete'));
+?>
+Du hast den Bildungsstandard 5-6 erreicht und kannst hier die Daten in den Kompetenzrastern unwiderruflich löschen.
+<br /><br />
+<input type="button"
+	   value="Kompetenzraster des Bildungsstandard 5-6 jetzt löschen"
+	   onclick="if (confirm('Wirklich löschen?')) alert('TODO: Löschroutine hier einbinden');"
+/>
+<?php
 
-//alle noch nicht gelöschten Benutzer
-$users = $DB->get_records('user', array('deleted' => 0));
-echo html_writer::start_tag('ul', array('class' => 'exadeleteul'));
-foreach ($users as $user) {
-	if (isguestuser($user)) continue;
-
-	echo html_writer::start_tag('li', array('class' => 'exadeleteli')).
-		html_writer::checkbox('users', $user->id, false, $user->firstname." ".$user->lastname).
-		html_writer::end_tag('li');
-}
-echo html_writer::end_tag('ul');
-$buttons = "";
-
-if (block_exadelete\check_block_available('exacomp'))
-	$buttons .= html_writer::empty_tag('input', array('type' => 'submit', 'value' => get_string('exacomp_data', 'block_exadelete'), 'name' => 'delete_exacomp'));
-
-if (block_exadelete\check_block_available('exaport'))
-	$buttons .= html_writer::empty_tag('input', array('type' => 'submit', 'value' => get_string('exaport_data', 'block_exadelete'), 'name' => 'delete_exaport'));
-
-if (block_exadelete\check_block_available('exastud'))
-	$buttons .= html_writer::empty_tag('input', array('type' => 'submit', 'value' => get_string('exastud_data', 'block_exadelete'), 'name' => 'delete_exastud'));
-
-echo '<form id="block_exadelete_delete_users" method="post" action="'.$_SERVER['REQUEST_URI'].'">';
-echo '<input type="hidden" name="sesskey" value="'.sesskey().'" />';
-echo '<input type="hidden" name="userids" />';
-echo html_writer::div($buttons, 'buttons');
-
-echo '</form>';
-
-echo html_writer::end_tag('div');
 echo $OUTPUT->footer();

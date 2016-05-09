@@ -19,62 +19,86 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+require __DIR__.'/inc.php';
+
 class block_exadelete extends block_list {
 
-    function init() {
-        $this->title = get_string('pluginname', 'block_exadelete');
-    }
+	function init() {
+		$this->title = get_string('blocktitle', 'block_exadelete');
+	}
 
-    function get_content() {
-        global $OUTPUT;
-        
-        if ($this->content !== null) {
-            return $this->content;
-        }
+	function get_content() {
+		global $OUTPUT;
 
-        if (empty($this->instance)) {
-            $this->content = '';
-            return $this->content;
-        }
+		if ($this->content !== null) {
+			return $this->content;
+		}
 
-        $this->content = new stdClass();
-        $this->content->items = array();
-        $this->content->icons = array();
-        $this->content->footer = '';
+		if (empty($this->instance)) {
+			$this->content = '';
 
-        $globalcontext = context_system::instance();
+			return $this->content;
+		}
 
-    	if(has_capability('block/exadelete:admin', $globalcontext)){	//Admin sieht immer Modulkonfiguration
-    		$icon = '<img src="'.$OUTPUT->pix_url('userban', 'block_exadelete').'" class="icon" alt="" />';
-			$this->content->items[] = html_writer::link(new moodle_url('/blocks/exadelete/anonymizeuser.php'), $icon.get_string('anonymizeusers', 'block_exadelete'), array('title'=>get_string('anonymizeusers', 'block_exadelete')));
+		$this->content = new stdClass();
+		$this->content->items = array();
+		$this->content->icons = array();
+		$this->content->footer = '';
 
-    		$icon = '<img src="'.$OUTPUT->pix_url('serverban', 'block_exadelete').'" class="icon" alt="" />';
-			$this->content->items[] = html_writer::link(new moodle_url('/blocks/exadelete/deleteexabis.php'), $icon.get_string('deleteexabis', 'block_exadelete'), array('title'=>get_string('deleteexabis', 'block_exadelete')));
-    	}
-		
-        return $this->content;
-    }
+		$globalcontext = context_system::instance();
 
-    public function applicable_formats() {
-        return array('all' => false,
-                     'site' => false,
-					 'my' => false,
-                     'site-index' => true,
-                     'admin' => true,
-                     'course-view' => false, 
-                     'mod' => false
-                    );
-    }
+		$this->content->items[] = 'Option für Schüler:';
+		$icon = '<img src="'.$OUTPUT->pix_url('userban', 'block_exadelete').'" class="icon" alt="" />';
+		$this->content->items[] = html_writer::link(new moodle_url('/blocks/exadelete/student.php'), $icon.block_exadelete\trans(['de:Meine Daten löschen']));
 
-    public function instance_allow_multiple() {
-          return false;
-    }
+		/*
+		$this->content->items[] = 'Option für Lehrer:';
+		$icon = '<img src="'.$OUTPUT->pix_url('klassenzuteilung', 'block_exastud').'" class="icon" alt="" />';
+		$this->content->items[] = html_writer::link(new moodle_url('/blocks/exadelete/teacher.php'), $icon.block_exadelete\trans(['de:Erreichte Bildungsstandards festlegen']));
+		*/
 
-    function has_config() {
-        return false;
-    }
+		if (has_capability('block/exadelete:admin', $globalcontext)) {    //Admin sieht immer Modulkonfiguration
+			$this->content->items[] = 'Optionen für Administrator:';
 
-    public function cron() {
-        return true;
-    }
+			$icon = '<img src="'.$OUTPUT->pix_url('userban', 'block_exadelete').'" class="icon" alt="" />';
+			$this->content->items[] = html_writer::link(new moodle_url('/blocks/exadelete/admin.php'), $icon.\block_exadelete\trans('de:Schüler Daten löschen'));
+
+			$icon = '<img src="'.$OUTPUT->pix_url('userban', 'block_exadelete').'" class="icon" alt="" />';
+			$this->content->items[] = html_writer::link(new moodle_url('/blocks/exadelete/anonymizeuser.php'), $icon.get_string('anonymizeusers', 'block_exadelete'));
+
+			// disabled for now
+			/*
+			$icon = '<img src="'.$OUTPUT->pix_url('serverban', 'block_exadelete').'" class="icon" alt="" />';
+			$this->content->items[] = html_writer::link(new moodle_url('/blocks/exadelete/deleteexabis.php'), $icon.get_string('deleteexabis', 'block_exadelete'));
+			*/
+		} else {
+			// not admin, is teacher or student
+			// -> show student options
+		}
+
+		return $this->content;
+	}
+
+	public function applicable_formats() {
+		return array('all' => false,
+			'site' => false,
+			'my' => true,
+			'site-index' => true,
+			'admin' => true,
+			'course-view' => false,
+			'mod' => false,
+		);
+	}
+
+	public function instance_allow_multiple() {
+		return false;
+	}
+
+	function has_config() {
+		return false;
+	}
+
+	public function cron() {
+		return true;
+	}
 }
