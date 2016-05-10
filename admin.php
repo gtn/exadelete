@@ -18,6 +18,7 @@
 // This copyright notice MUST APPEAR in all copies of the script!
 
 require_once __DIR__.'/inc.php';
+require_once __DIR__.'/../exastud/inc.php';
 
 $context = context_system::instance();
 require_login();
@@ -29,76 +30,48 @@ $page_identifier = 'deleteexabis';
 
 /* PAGE URL - MUST BE CHANGED */
 $PAGE->set_context($context);
-$PAGE->set_url('/blocks/exadelete/deleteexabis.php');
+$PAGE->set_url('/blocks/exadelete/admin.php');
 $PAGE->set_heading(get_string('blocktitle', 'block_exadelete'));
 $PAGE->set_title(get_string($page_identifier, 'block_exadelete'));
 $PAGE->requires->css('/blocks/exadelete/styles.css');
 $PAGE->requires->jquery();
-$PAGE->requires->js('/blocks/exadelete/javascript/deleteexabis.js');
+// $PAGE->requires->js('/blocks/exadelete/javascript/deleteexabis.js');
 
-$navnode = $PAGE->navigation->add(get_string('deleteexabis', 'block_exadelete'), new moodle_url('/blocks/exadelete/deleteexabis'), navigation_node::TYPE_CONTAINER);
+$navnode = $PAGE->navigation->add(get_string('deleteexabis', 'block_exadelete'), new moodle_url('/blocks/exadelete/admin'), navigation_node::TYPE_CONTAINER);
 $navnode->make_active();// build tab navigation & print header
 
 echo $OUTPUT->header();
 
-/*
-if (optional_param('delete_exaport', null, PARAM_RAW)) {
-	$action = 'delete_exaport';
-} elseif (optional_param('delete_exastud', null, PARAM_RAW)) {
-	$action = 'delete_exastud';
-} elseif (optional_param('delete_exacomp', null, PARAM_RAW)) {
-	$action = 'delete_exacomp';
-} else {
-	$action = '';
-}
-
-if ($action) {
+if (optional_param('action', '', PARAM_TEXT) == 'deletedata') {
 	require_sesskey();
 
-	switch ($action) {
-		case 'delete_exacomp':
-			if (!block_exadelete\check_block_available('exacomp')) {
-				throw new moodle_exception('action not available');
-			}
+	$deleteusers = \block_exadelete\param::optional_array('deleteusers', [PARAM_INT => (object)[
+		'bildungsstandard_erreicht' => PARAM_TEXT,
+		'dropped_out' => PARAM_BOOL,
+	]]);
+	$exastud = optional_param('exastud', 0, PARAM_BOOL);
+	$exacomp = optional_param('exacomp', 0, PARAM_BOOL);
 
-			$userids = clean_param_array(explode(',', required_param('userids', PARAM_SEQUENCE)), PARAM_INT);
+	foreach ($deleteusers as $userid=>$deleteuser) {
+		if ($deleteuser->dropped_out) {
+			echo "Benutzer #$userid: Ausgeschieden";
+		} elseif ($deleteuser->bildungsstandard_erreicht) {
+			echo "Benutzer #$userid: Bildungsstandard {$deleteuser->bildungsstandard_erreicht} erreicht";
+		} else {
+			continue;
+		}
 
-			foreach ($userids as $userid) {
-				block_exacomp\api::delete_user_data($userid);
-			}
-
-			break;
-		case 'delete_exaport':
-			if (!block_exadelete\check_block_available('exaport')) {
-				throw new moodle_exception('action not available');
-			}
-
-			$userids = clean_param_array(explode(',', required_param('userids', PARAM_SEQUENCE)), PARAM_INT);
-
-			foreach ($userids as $userid) {
-				block_exaport\api::delete_user_data($userid);
-			}
-
-			break;
-		case('delete_exastud'):
-			if (!block_exadelete\check_block_available('exastud')) {
-				throw new moodle_exception('action not available');
-			}
-
-			$userids = clean_param_array(explode(',', required_param('userids', PARAM_SEQUENCE)), PARAM_INT);
-
-			foreach ($userids as $userid) {
-				block_exastud\api::delete_user_data($userid);
-			}
-
-			break;
-		default:
-			print_error('wrong action: '.$action);
+		echo "<br/>";
+		if ($exastud && block_exadelete\check_block_available('exastud')) {
+			echo "todo: exastud daten löschen<br />";
+		}
+		if ($exacomp && block_exadelete\check_block_available('exacomp')) {
+			echo "todo: exacomp daten löschen<br />";
+		}
 	}
 
-	notice(\block_exadelete\trans(['de:Ausgewählte Benutzerdaten wurden entfernt!']), new moodle_url('/blocks/exadelete/deleteexabis.php'));
+	notice(\block_exadelete\trans(['de:Ausgewählte Benutzerdaten wurden entfernt!']), new moodle_url('/blocks/exadelete/admin.php'));
 }
-*/
 
 //CONTENT-REGION
 
@@ -117,6 +90,45 @@ $table->align = array("left", "left", "left", "left");
 $table->attributes['style'] = "width: 100%;";
 $table->size = ['5%', '20%', '20%', '20%', '20%'];
 
+$users_dropped_out = $DB->get_records_sql("
+	SELECT u.*, dropped_out.classid
+	FROM {user} u
+	JOIN {block_exastuddata} dropped_out ON dropped_out.studentid=u.id AND dropped_out.name='dropped_out' AND dropped_out.value
+	WHERE deleted=0
+");
+// $users = $DB->get_records('user', array('deleted' => 0));
+foreach ($users_dropped_out as $user) {
+	$userdata = \block_exastud\get_class_student_data($user->classid, $user->id);
+
+	$table->data[] = [
+		'<input type="checkbox" name="deleteusers['.$user->id.'][dropped_out]" value="1" />',
+		'Ausgeschieden am '.userdate($userdata->dropped_out_time),
+		$user->firstname,
+		$user->lastname,
+		$user->email,
+	];
+}
+
+$users_bildungsstandard_erreicht = $DB->get_records_sql("
+	SELECT u.*, bildungsstandard_erreicht.classid
+	FROM {user} u
+	JOIN {block_exastuddata} bildungsstandard_erreicht ON bildungsstandard_erreicht.studentid=u.id AND bildungsstandard_erreicht.name='bildungsstandard_erreicht' AND bildungsstandard_erreicht.value
+	WHERE deleted=0
+");
+// $users = $DB->get_records('user', array('deleted' => 0));
+foreach ($users_bildungsstandard_erreicht as $user) {
+	$userdata = \block_exastud\get_class_student_data($user->classid, $user->id);
+
+	$table->data[] = [
+		'<input type="checkbox" name="deleteusers['.$user->id.'][bildungsstandard_erreicht]" value="'.$userdata->bildungsstandard_erreicht.'" />',
+		'Bildungsstandard '.$userdata->bildungsstandard_erreicht.' erreicht am '.userdate($userdata->bildungsstandard_erreicht_time),
+		$user->firstname,
+		$user->lastname,
+		$user->email,
+	];
+}
+
+/*
 for ($i = 0; $i < 15; $i++) {
 	$table->data[] = [
 		'<input type="checkbox" />',
@@ -126,17 +138,24 @@ for ($i = 0; $i < 15; $i++) {
 		'email',
 	];
 }
-//
+*/
+
+echo '<form method="post">';
+echo '<input type="hidden" name="sesskey" value="'.sesskey().'" />';
+echo '<input type="hidden" name="action" value="deletedata" />';
 
 echo html_writer::table($table);
 
 echo html_writer::tag("h2", \block_exadelete\trans('de:Löschverhalten'));
 ?>
-	<input type="checkbox" value="leb" /> Lernentwicklungsbericht<br/>
-	<input type="checkbox" value="kompetenzraster" /> Kompetenzraster<br/>
-	<input type="button"
+	<input type="checkbox" name="exastud" value="1" /> Lernentwicklungsbericht<br/>
+	<input type="checkbox" name="exacomp" value="1" /> Kompetenzraster<br/>
+	<input type="submit"
 		   value="Daten löschen"
-		   onclick="if (confirm('Wirklich löschen?')) alert('TODO: Löschroutine hier einbinden');"
+		   onclick="return confirm('Wirklich löschen?');"
 	/>
 <?php
+
+echo '</form>';
+
 echo $OUTPUT->footer();
