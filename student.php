@@ -100,12 +100,17 @@ if ($action) {
 
 //CONTENT-REGION
 ?>
-Du hast den Bildungsstandard 5-6 erreicht und kannst hier die Daten in den Kompetenzrastern unwiderruflich löschen.
-<br /><br />
-<input type="button"
-	   value="Kompetenzraster des Bildungsstandard 5-6 jetzt löschen"
-	   onclick="if (confirm('Wirklich löschen?')) alert('TODO: Löschroutine hier einbinden');"
-/>
+	Du hast den Bildungsstandard 5-6 erreicht und kannst hier die Daten in den Kompetenzrastern unwiderruflich löschen:
+	<br/>
+	<ul>
+		<li>Alle Selbsteinschätzungen</li>
+		<li>Alle Lehrerbewertungen</li>
+	</ul>
+	<br/>
+	<input type="button"
+		   value="Kompetenzraster des Bildungsstandard 5-6 jetzt löschen"
+		   onclick="if (confirm('Wirklich löschen?')) alert('TODO: Löschroutine hier einbinden');"
+	/>
 <?php
 
 echo $OUTPUT->footer();
