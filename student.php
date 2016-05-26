@@ -27,14 +27,14 @@ $page_identifier = 'deleteexabis';
 
 /* PAGE URL - MUST BE CHANGED */
 $PAGE->set_context($context);
-$PAGE->set_url('/blocks/exadelete/deleteexabis.php');
+$PAGE->set_url('/blocks/exadelete/student.php');
 $PAGE->set_heading(get_string('blocktitle', 'block_exadelete'));
 $PAGE->set_title(get_string($page_identifier, 'block_exadelete'));
 $PAGE->requires->css('/blocks/exadelete/styles.css');
 $PAGE->requires->jquery();
 $PAGE->requires->js('/blocks/exadelete/javascript/deleteexabis.js');
 
-$navnode = $PAGE->navigation->add(get_string('deleteexabis', 'block_exadelete'), new moodle_url('/blocks/exadelete/deleteexabis'), navigation_node::TYPE_CONTAINER);
+$navnode = $PAGE->navigation->add(get_string('deleteexabis', 'block_exadelete'), $PAGE->url, navigation_node::TYPE_CONTAINER);
 $navnode->make_active();// build tab navigation & print header
 
 echo $OUTPUT->header();

@@ -36,7 +36,7 @@ $PAGE->requires->css('/blocks/exadelete/styles.css');
 $PAGE->requires->jquery();
 $PAGE->requires->js('/blocks/exadelete/javascript/deleteexabis.js');
 
-$navnode = $PAGE->navigation->add(get_string('deleteexabis', 'block_exadelete'), new moodle_url('/blocks/exadelete/deleteexabis'), navigation_node::TYPE_CONTAINER);
+$navnode = $PAGE->navigation->add(get_string('deleteexabis', 'block_exadelete'), $PAGE->url, navigation_node::TYPE_CONTAINER);
 $navnode->make_active();// build tab navigation & print header
 
 echo $OUTPUT->header();

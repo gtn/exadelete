@@ -34,7 +34,7 @@ $PAGE->set_heading(get_string('blocktitle', 'block_exadelete'));
 $PAGE->set_title(get_string($page_identifier, 'block_exadelete'));
 
 
-$navnode = $PAGE->navigation->add(get_string('anonymizeusers', 'block_exadelete'), new moodle_url('/blocks/exadelete/anonymize.php'), navigation_node::TYPE_CONTAINER);
+$navnode = $PAGE->navigation->add(get_string('anonymizeusers', 'block_exadelete'), $PAGE->url, navigation_node::TYPE_CONTAINER);
 $navnode->make_active();// build tab navigation & print header
 
 echo $OUTPUT->header();
