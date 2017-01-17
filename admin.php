@@ -98,7 +98,7 @@ $users_dropped_out = $DB->get_records_sql("
 ");
 // $users = $DB->get_records('user', array('deleted' => 0));
 foreach ($users_dropped_out as $user) {
-	$userdata = \block_exastud\get_class_student_data($user->classid, $user->id);
+	$userdata = block_exastud_get_class_student_data($user->classid, $user->id);
 
 	$table->data[] = [
 		'<input type="checkbox" name="deleteusers['.$user->id.'][dropped_out]" value="1" />',
@@ -117,7 +117,7 @@ $users_bildungsstandard_erreicht = $DB->get_records_sql("
 ");
 // $users = $DB->get_records('user', array('deleted' => 0));
 foreach ($users_bildungsstandard_erreicht as $user) {
-	$userdata = \block_exastud\get_class_student_data($user->classid, $user->id);
+	$userdata = block_exastud_get_class_student_data($user->classid, $user->id);
 
 	$table->data[] = [
 		'<input type="checkbox" name="deleteusers['.$user->id.'][bildungsstandard_erreicht]" value="'.$userdata->bildungsstandard_erreicht.'" />',
