@@ -22,8 +22,9 @@ require_once __DIR__.'/../exastud/inc.php';
 
 $context = context_system::instance();
 require_login();
-if (!has_capability('block/exadelete:admin', $context))
+if (!has_capability('block/exadelete:admin', $context)) {
 	die('not allowed to access this site');
+}
 
 /* PAGE IDENTIFIER - MUST BE CHANGED. Please use string identifier from lang file */
 $page_identifier = 'deleteexabis';
@@ -52,7 +53,7 @@ if (optional_param('action', '', PARAM_TEXT) == 'deletedata') {
 	$exastud = optional_param('exastud', 0, PARAM_BOOL);
 	$exacomp = optional_param('exacomp', 0, PARAM_BOOL);
 
-	foreach ($deleteusers as $userid=>$deleteuser) {
+	foreach ($deleteusers as $userid => $deleteuser) {
 		if ($deleteuser->dropped_out) {
 			echo "Benutzer #$userid: Ausgeschieden";
 		} elseif ($deleteuser->bildungsstandard_erreicht) {
@@ -63,10 +64,10 @@ if (optional_param('action', '', PARAM_TEXT) == 'deletedata') {
 
 		echo "<br/>";
 		if ($exastud && block_exadelete\check_block_available('exastud')) {
-			echo "todo: exastud daten löschen<br />";
+			block_exastud\api::delete_user_data($userid);
 		}
 		if ($exacomp && block_exadelete\check_block_available('exacomp')) {
-			echo "todo: exacomp daten löschen<br />";
+			block_exacomp\api::delete_user_data($userid);
 		}
 	}
 
@@ -90,17 +91,27 @@ $table->align = array("left", "left", "left", "left");
 $table->attributes['style'] = "width: 100%;";
 $table->size = ['5%', '20%', '20%', '20%', '20%'];
 
-$users_dropped_out = $DB->get_records_sql("
+$users_dropped_out = $DB->get_recordset_sql("
 	SELECT u.*, dropped_out.classid
 	FROM {user} u
 	JOIN {block_exastuddata} dropped_out ON dropped_out.studentid=u.id AND dropped_out.name='dropped_out' AND dropped_out.value
 	WHERE deleted=0
 ");
+$users_dropped_out = iterator_to_array($users_dropped_out, false);
+
 // $users = $DB->get_records('user', array('deleted' => 0));
 foreach ($users_dropped_out as $user) {
-	$userdata = block_exastud_get_class_student_data($user->classid, $user->id);
-
-	$table->data[] = [
+	if (!$class = block_exastud_get_class($user->classid)) {
+		continue;
+	}
+	if (!$userdata = block_exastud_get_class_student_data($user->classid, $user->id)) {
+		continue;
+	}
+	if (isset($table->data[$user->id])) {
+		continue;
+	}
+	// [$user->id] => prevent to list a user twice
+	$table->data[$user->id] = [
 		'<input type="checkbox" name="deleteusers['.$user->id.'][dropped_out]" value="1" />',
 		'Ausgeschieden am '.userdate($userdata->dropped_out_time),
 		$user->firstname,
@@ -109,17 +120,26 @@ foreach ($users_dropped_out as $user) {
 	];
 }
 
-$users_bildungsstandard_erreicht = $DB->get_records_sql("
+$users_bildungsstandard_erreicht = $DB->get_recordset_sql("
 	SELECT u.*, bildungsstandard_erreicht.classid
 	FROM {user} u
 	JOIN {block_exastuddata} bildungsstandard_erreicht ON bildungsstandard_erreicht.studentid=u.id AND bildungsstandard_erreicht.name='bildungsstandard_erreicht' AND bildungsstandard_erreicht.value
 	WHERE deleted=0
 ");
+$users_bildungsstandard_erreicht = iterator_to_array($users_bildungsstandard_erreicht, false);
 // $users = $DB->get_records('user', array('deleted' => 0));
 foreach ($users_bildungsstandard_erreicht as $user) {
-	$userdata = block_exastud_get_class_student_data($user->classid, $user->id);
-
-	$table->data[] = [
+	if (!$class = block_exastud_get_class($user->classid)) {
+		continue;
+	}
+	if (!$userdata = block_exastud_get_class_student_data($user->classid, $user->id)) {
+		continue;
+	}
+	if (isset($table->data[$user->id])) {
+		continue;
+	}
+	// [$user->id] => prevent to list a user twice
+	$table->data[$user->id] = [
 		'<input type="checkbox" name="deleteusers['.$user->id.'][bildungsstandard_erreicht]" value="'.$userdata->bildungsstandard_erreicht.'" />',
 		'Bildungsstandard '.$userdata->bildungsstandard_erreicht.' erreicht am '.userdate($userdata->bildungsstandard_erreicht_time),
 		$user->firstname,
@@ -127,18 +147,6 @@ foreach ($users_bildungsstandard_erreicht as $user) {
 		$user->email,
 	];
 }
-
-/*
-for ($i = 0; $i < 15; $i++) {
-	$table->data[] = [
-		'<input type="checkbox" />',
-		$i < 5 ? 'Ausgeschieden' : 'Bildungsstandard 5-6 erreicht',
-		'Vorname',
-		'Nachanme',
-		'email',
-	];
-}
-*/
 
 echo '<form method="post">';
 echo '<input type="hidden" name="sesskey" value="'.sesskey().'" />';
@@ -148,11 +156,11 @@ echo html_writer::table($table);
 
 echo html_writer::tag("h2", \block_exadelete\trans('de:Löschverhalten'));
 ?>
-	<input type="checkbox" name="exastud" value="1" /> Lernentwicklungsbericht<br/>
-	<input type="checkbox" name="exacomp" value="1" /> Kompetenzraster<br/>
+	<input type="checkbox" name="exastud" value="1"/> Lernentwicklungsbericht<br/>
+	<input type="checkbox" name="exacomp" value="1"/> Kompetenzraster<br/>
 	<input type="submit"
-		   value="Daten löschen"
-		   onclick="return confirm('Wirklich löschen?');"
+	       value="Daten löschen"
+	       onclick="return confirm('Wirklich löschen?');"
 	/>
 <?php
 
