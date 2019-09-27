@@ -48,27 +48,27 @@ class block_exadelete extends block_list {
 		$globalcontext = context_system::instance();
 
 		$this->content->items[] = 'Option für Schüler:';
-		$icon = '<img src="'.$OUTPUT->pix_url('userban', 'block_exadelete').'" class="icon" alt="" />';
+		$icon = '<img src="'.$OUTPUT->image_url('userban', 'block_exadelete').'" class="icon" alt="" />';
 		$this->content->items[] = html_writer::link(new moodle_url('/blocks/exadelete/student.php'), $icon.block_exadelete\trans(['de:Meine Daten löschen']));
 
 		/*
 		$this->content->items[] = 'Option für Lehrer:';
-		$icon = '<img src="'.$OUTPUT->pix_url('klassenzuteilung', 'block_exastud').'" class="icon" alt="" />';
+		$icon = '<img src="'.$OUTPUT->image_url('klassenzuteilung', 'block_exastud').'" class="icon" alt="" />';
 		$this->content->items[] = html_writer::link(new moodle_url('/blocks/exadelete/teacher.php'), $icon.block_exadelete\trans(['de:Erreichte Bildungsstandards festlegen']));
 		*/
 
 		if (has_capability('block/exadelete:admin', $globalcontext)) {    //Admin sieht immer Modulkonfiguration
 			$this->content->items[] = 'Optionen für Administrator:';
 
-			$icon = '<img src="'.$OUTPUT->pix_url('userban', 'block_exadelete').'" class="icon" alt="" />';
+			$icon = '<img src="'.$OUTPUT->image_url('userban', 'block_exadelete').'" class="icon" alt="" />';
 			$this->content->items[] = html_writer::link(new moodle_url('/blocks/exadelete/admin.php'), $icon.\block_exadelete\trans('de:Schüler Daten löschen'));
 
-			$icon = '<img src="'.$OUTPUT->pix_url('userban', 'block_exadelete').'" class="icon" alt="" />';
+			$icon = '<img src="'.$OUTPUT->image_url('userban', 'block_exadelete').'" class="icon" alt="" />';
 			$this->content->items[] = html_writer::link(new moodle_url('/blocks/exadelete/anonymizeuser.php'), $icon.get_string('anonymizeusers', 'block_exadelete'));
 
 			// disabled for now
 			/*
-			$icon = '<img src="'.$OUTPUT->pix_url('serverban', 'block_exadelete').'" class="icon" alt="" />';
+			$icon = '<img src="'.$OUTPUT->image_url('serverban', 'block_exadelete').'" class="icon" alt="" />';
 			$this->content->items[] = html_writer::link(new moodle_url('/blocks/exadelete/deleteexabis.php'), $icon.get_string('deleteexabis', 'block_exadelete'));
 			*/
 		} else {
