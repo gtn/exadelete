@@ -31,3 +31,4 @@ $string['exacomp_data'] = 'Delete user data from Exabis Competence grid';
 $string['exaport_data'] = 'Delete user data from Exabis ePortfolio';
 $string['exastud_data'] = 'Delete user data from Exabis Student Review';
 $string['deleteexabis'] = 'Delete data form Exabis modules';
+$string['alluserdatadeleted'] = 'Data was deleted from User: ';

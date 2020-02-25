@@ -76,7 +76,7 @@ if (optional_param('action', '', PARAM_TEXT) == 'deletedata') {
 
 //CONTENT-REGION
 
-echo html_writer::tag("h2", \block_exadelete\trans('de:Schüler Daten löschen'));
+echo html_writer::tag("h2", \block_exadelete\trans('de:Schüler Daten löschen (Lernentwicklungsbericht - exastud'));
 
 $table = new html_table();
 

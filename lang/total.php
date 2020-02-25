@@ -74,4 +74,8 @@ return [
 		'Daten aus Exabis Modulen bereinigen',
 		'Delete data form Exabis modules',
 	],
+	'alluserdatadeleted' => [
+		'Die Daten von diesem Benutzer wurden gelöscht: ',
+		'Data was deleted from User: ',
+	],
 ];

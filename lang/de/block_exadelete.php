@@ -31,3 +31,4 @@ $string['exacomp_data'] = 'Benutzerdaten aus Exabis Kompetenzraster entfernen';
 $string['exaport_data'] = 'Benutzerdaten aus Exabis ePortfolio entfernen';
 $string['exastud_data'] = 'Benutzerdaten aus Exabis Lernentwicklungsbericht entfernen';
 $string['deleteexabis'] = 'Daten aus Exabis Modulen bereinigen';
+$string['alluserdatadeleted'] = 'Die Daten von diesem Benutzer wurden gelöscht: ';

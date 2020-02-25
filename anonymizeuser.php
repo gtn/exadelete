@@ -79,7 +79,12 @@ if (!$users) {
 
 		// delete entry in every table where the column with userid is named userid
 		foreach ($delte_these_tables as $table) {
-			$result = $DB->delete_records($table, array("userid" => $userid));
+			 try{
+       		$result = $DB->delete_records($table, array("userid" => $userid));   
+		    }catch (\Exception $e) {
+		       //table not found
+		    }
+			
 		}
 
 		// delete messages that where received and sended by the user
@@ -163,7 +168,7 @@ if (!$users) {
 
 		$result = $DB->update_record("user", $update);
 
-		echo \block_exadelete\get_string('alluserdatadeleted', null, fullname($user))."<br/>";
+		echo \block_exadelete\get_string('alluserdatadeleted', null)." ".fullname($user)."<br/>";
 	}
 }
 
