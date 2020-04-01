@@ -19,8 +19,14 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'block_exadelete';
-$plugin->release = '4.6.0';
-$plugin->version   = 2020040103;
-$plugin->requires  = 2015051100;
-$plugin->maturity = MATURITY_STABLE;
+$tasks = array(
+	array(
+		'classname' => 'block_exadelete\task\delete_without_enrolement',
+		'blocking' => 0,
+		'minute' => '0',
+		'hour' => '3',
+		'day' => '*',
+		'month' => '*',
+		'dayofweek' => '*',
+	),
+);

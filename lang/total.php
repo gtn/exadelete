@@ -78,4 +78,32 @@ return [
 		'Die Daten von diesem Benutzer wurden gelöscht: ',
 		'Data was deleted from User: ',
 	],
+    'deleteusers_without_enrollments' => [
+        'Nutzer ohne Kurseinschreibung löschen',
+        'Delete Users without Enrollment',
+    ],
+    'deleteusers_without_confirmation_message' => [
+        'Wollen sie wirklich diese Benutzer löschen?',
+        'Do you really want to delete these users?',
+    ],
+    'withoutEnrollment_description' => [
+        'Nutzer ohne Kurseinschreibung löschen',
+        'Delete Users without Enrollment',
+    ],
+    'delete_button' => [
+        'Löschen',
+        'Delete',
+    ],
+    'task_delete_without_enrolement_and_anonymize' => [
+        'Nutzer ohne Kurseinschreibung löschen und Daten gelöschter Benutzer bereinigen',
+        'Delete Users without Enrollment and clean up user data'
+    ],
+    'settings_show_block_for_users' => [
+        'Users can see the block',
+        'Users can see the block'
+    ],
+    'settings_show_block_for_users_description' => [
+        'If checked, users can see the block, if not, only admin can see the block',
+        'If checked, users can see the block, if not, only admin can see the block'
+    ],
 ];

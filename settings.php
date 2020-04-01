@@ -17,10 +17,12 @@
 //
 // This copyright notice MUST APPEAR in all copies of the script!
 
-defined('MOODLE_INTERNAL') || die();
+defined('MOODLE_INTERNAL') || die;
 
-$plugin->component = 'block_exadelete';
-$plugin->release = '4.6.0';
-$plugin->version   = 2020040103;
-$plugin->requires  = 2015051100;
-$plugin->maturity = MATURITY_STABLE;
+require_once __DIR__.'/inc.php';
+
+$settings->add(new admin_setting_configcheckbox('exadelete/show_block_for_users',
+        get_string('settings_show_block_for_users', 'block_exadelete'),
+        get_string('settings_show_block_for_users_description', 'block_exadelete'), 0));
+
+

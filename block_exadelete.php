@@ -28,7 +28,13 @@ class block_exadelete extends block_list {
 	}
 
 	function get_content() {
-		global $OUTPUT;
+		global $OUTPUT, $USER;
+        $isAdmin = is_siteadmin($USER);
+        $showForUsers = get_config('exadelete', 'show_block_for_users');
+
+        if (!$isAdmin && !$showForUsers) {
+            return true; // no content for non-admins
+        }
 
 		if ($this->content !== null) {
 			return $this->content;
@@ -66,6 +72,10 @@ class block_exadelete extends block_list {
 			$icon = '<img src="'.$OUTPUT->image_url('userban', 'block_exadelete').'" class="icon" alt="" />';
 			$this->content->items[] = html_writer::link(new moodle_url('/blocks/exadelete/anonymizeuser.php'), $icon.get_string('anonymizeusers', 'block_exadelete'));
 
+			$icon = '<img src="'.$OUTPUT->image_url('userban', 'block_exadelete').'" class="icon" alt="" />';
+			$this->content->items[] = html_writer::link(new moodle_url('/blocks/exadelete/anonymizeuser.php', ['without_enrollment' => 1]),
+                                                            $icon.get_string('deleteusers_without_enrollments', 'block_exadelete'));
+
 			// disabled for now
 			/*
 			$icon = '<img src="'.$OUTPUT->image_url('serverban', 'block_exadelete').'" class="icon" alt="" />';
@@ -95,7 +105,7 @@ class block_exadelete extends block_list {
 	}
 
 	function has_config() {
-		return false;
+		return true;
 	}
 
 	public function cron() {

@@ -1,0 +1,59 @@
+<?php
+// This file is part of Exabis Delete
+//
+// (c) 2016 GTN - Global Training Network GmbH <office@gtn-solutions.com>
+//
+// Exabis Delete is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This script is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You can find the GNU General Public License at <http://www.gnu.org/licenses/>.
+//
+// This copyright notice MUST APPEAR in all copies of the script!
+namespace block_exadelete\task;
+
+require_once __DIR__.'/../../inc.php';
+
+class delete_without_enrolement extends \core\task\scheduled_task {
+
+    /**
+     * Return the task's name as shown in admin screens.
+     *
+     * @return string
+     */
+    public function get_name() {
+        return get_string('task_delete_without_enrolement_and_anonymize', 'block_exadelete');
+    }
+
+    /**
+     * Execute the task.
+     */
+    public function execute() {
+        global $DB;
+        $userIds = null;
+        // anonymize users list
+        $select = "deleted = 1 AND firstname <> 'Deleted'";
+        $users = $DB->get_records_select("user", $select);
+        if ($users && count($users) > 0) {
+            $userIds = array_map(function($u) {return $u->id;}, $users);
+        }
+        // add users without enrollments
+        $select = 'SELECT *
+                FROM mdl_user 
+                WHERE deleted != 1 
+                  AND id != 1 
+                  AND EXISTS ( SELECT userid FROM mdl_user_enrolments ) 
+                  AND id NOT IN ( SELECT userid FROM mdl_user_enrolments )
+                  '.($userIds ? ' AND is NOT IN ('.implode(',', $userIds).') ' : '').'
+                ORDER BY firstname';
+        $users = $DB->get_records_sql($select);
+        // delete process
+        $res = block_exadelete_clean_anonimize_users($users);
+    }
+}
