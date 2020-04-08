@@ -73,24 +73,30 @@ if ($withoutEnrollment) {
     }
     // list of users
     if ($users && !$do_action) {
-        echo html_writer::tag('div', get_string('deleteusers_without_confirmation_message', 'block_exadelete'), ['class' => 'alert alert-info']);
-        $button = html_writer::tag('button', get_string('delete_button', 'block_exadelete'), ['class' => 'btn btn-danger', 'onClick' => 'window.location.href = \''.$PAGE->url.'&submit_action=1'.'\'']);
-        //if (count($users) > 100) {
-        //    echo $button;
-        //}
-        echo html_writer::start_tag('div', ['class' => 'exadelete-user-list']);
-        foreach ($users as $user) {
-            echo fullname($user).'<br>';
+        $adminIds = array_keys(get_admins());
+        $userNames = '';
+        foreach ($users as $k => $user) {
+            if (in_array($user->id, $adminIds)) {
+                unset($users[$k]);
+                continue;
+            }
+            $userNames .= fullname($user).'<br>';
         }
-        echo html_writer::end_tag('div');
-        echo $button;
+        if (count($users) > 0) {
+            echo html_writer::tag('div', get_string('deleteusers_without_confirmation_message', 'block_exadelete'),
+                    ['class' => 'alert alert-info']);
+            echo html_writer::div($userNames, 'exadelete-user-list');
+            echo html_writer::tag('button',
+                            get_string('delete_button', 'block_exadelete'),
+                            ['class' => 'btn btn-danger', 'onClick' => 'window.location.href = \''.$PAGE->url.'&submit_action=1'.'\'']);
+        }
     }
 } else {
     echo html_writer::tag('p', get_string('description', 'block_exadelete'));
 }
 
 
-if (!$users) {
+if (!$users || count($users) == 0) {
 	echo html_writer::empty_tag('br').get_string('nousersfound', 'block_exadelete');
 } else {
     if ($do_action) {

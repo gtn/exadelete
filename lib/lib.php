@@ -42,6 +42,7 @@ function block_exadelete_clean_anonimize_users(array $users) {
     if (!is_array($users)) {
         $users = array($users);
     }
+    $adminIds = array_keys(get_admins());
     $return = array(
             'message' => ''
     );
@@ -70,6 +71,11 @@ function block_exadelete_clean_anonimize_users(array $users) {
 
     foreach ($users as $user) {
         $userid = $user->id;
+
+        // no admin delete
+        if (in_array($userid, $adminIds)) {
+            continue;
+        }
 
         // delete entry in every table where the column with userid is named userid
         foreach ($delete_these_tables as $table) {
