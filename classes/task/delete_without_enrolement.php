@@ -54,6 +54,6 @@ class delete_without_enrolement extends \core\task\scheduled_task {
                 ORDER BY firstname';
         $users = $DB->get_records_sql($select);
         // delete process
-        $res = block_exadelete_clean_anonimize_users($users);
+        $res = \block_exadelete\block_exadelete_clean_anonimize_users($users);
     }
 }

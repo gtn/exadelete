@@ -135,18 +135,18 @@ function block_exadelete_clean_anonimize_users(array $users) {
 
         $result = $DB->delete_records("files", array("userid" => $userid));
 
-        if (block_exadelete\check_block_available('exacomp')) {
-            block_exacomp\api::delete_user_data($userid);
+        if (\block_exadelete\check_block_available('exacomp')) {
+            \block_exacomp\api::delete_user_data($userid);
         }
-        if (block_exadelete\check_block_available('exaport')) {
-            block_exaport\api::delete_user_data($userid);
+        if (\block_exadelete\check_block_available('exaport')) {
+            \block_exaport\api::delete_user_data($userid);
         }
-        if (block_exadelete\check_block_available('exastud')) {
-            block_exastud\api::delete_user_data($userid);
+        if (\block_exadelete\check_block_available('exastud')) {
+            \block_exastud\api::delete_user_data($userid);
         }
 
         // don't delete entry in mdl_user, just make is anonymous and set deleted = true
-        $update = new stdClass();
+        $update = new \stdClass();
         $update->id = $userid;
         $update->username = "deletedUser".$userid;
         $update->firstname = "Deleted";

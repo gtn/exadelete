@@ -94,7 +94,7 @@ if (!$users) {
 	echo html_writer::empty_tag('br').get_string('nousersfound', 'block_exadelete');
 } else {
     if ($do_action) {
-        $res = block_exadelete_clean_anonimize_users($users);
+        $res = \block_exadelete\block_exadelete_clean_anonimize_users($users);
         if ($res['message']) {
             echo $res['message'];
         }
