@@ -8,6 +8,10 @@
 
 NOTE: This is a block that requires admin capability. Only the admin can add this plugin to the Website-Startpage
 
+NEW in v4.6.5
+- delete students who are in no course enroled
+- cron task for deleting features
+
 Teacher Options
 - Schüler Daten löschen:
 data of Students in exastud and/or exacomp who are set as "ausgeschieden" in exastud are deleted
