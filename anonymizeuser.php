@@ -53,10 +53,12 @@ if ($withoutEnrollment) {
     $select = 'SELECT *
                 FROM mdl_user 
                 WHERE deleted != 1 
-                  AND id != 1 
+                  AND id != 1
+                  AND timecreated < '.(time()-43200).' 
                   AND EXISTS ( SELECT userid FROM mdl_user_enrolments ) 
                   AND id NOT IN ( SELECT userid FROM mdl_user_enrolments )
                 ORDER BY firstname';
+
     $users = $DB->get_records_sql($select);
 } else {
     // anonymize users list
