@@ -131,7 +131,7 @@ class SimpleXMLElement extends \SimpleXMLElement {
 		}
 	}
 
-	public function addChild($name, $value = null, $namespace = null) {
+	public function addChild(string $name, ?string $value = null, ?string $namespace = null): ?\SimpleXMLElement {
 		if ($name instanceof SimpleXMLElement) {
 			$newNode = $name;
 			$node = dom_import_simplexml($this);
